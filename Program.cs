@@ -14,20 +14,30 @@ namespace CorEscuela
 
             System.Console.WriteLine(escuela);
 
-            Curso c1 = new Curso{
+            var arregloCursos = new Curso[3];
+            arregloCursos[0] = new Curso{
                 Nombre = "101"
             };
             Curso c2 = new Curso{
                 Nombre = "102",
                 Jornada = TiposJornadas.Vespertina
             };
+            arregloCursos[1] = c2;
             Curso c3 = new Curso{
                 Nombre = "103"
             };
+            arregloCursos[2] = c3;
 
-            System.Console.WriteLine(c1);
-            System.Console.WriteLine(c2);
-            System.Console.WriteLine(c3);
+            ImprimirCursos(arregloCursos);
+        }
+
+        private static void ImprimirCursos(Curso[] arregloCursos)
+        {
+            int item = 0;
+            while(item < arregloCursos.Length) {
+                System.Console.WriteLine(arregloCursos[item]);
+                item++;
+            }
         }
     }
 }
