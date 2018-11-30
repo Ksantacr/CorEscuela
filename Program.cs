@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CoreEscuela.Entidades;
 namespace CorEscuela
 {
@@ -13,15 +14,24 @@ namespace CorEscuela
 
             Console.WriteLine(escuela);
 
-            escuela.Cursos = new Curso[]{
+            escuela.Cursos = new List<Curso>(){
                 new Curso{Nombre = "101"},
                 new Curso{Nombre = "102",Jornada = TiposJornadas.Vespertina },
                 new Curso{Nombre = "103" }
             };
-
+            //Predicate<Curso> Validacion = Validador;
+            //escuela.Cursos.RemoveAll(Validador);
+            /* escuela.Cursos.RemoveAll(delegate(Curso c) {
+                return c.Nombre == "103";
+            });*/
+            escuela.Cursos.RemoveAll(c => c.Nombre == "101" && c.Jornada == TiposJornadas.Matutina);
             ImprimirCursos(escuela);
             Operadores();
         }
+        private static bool Validador(Curso curso) {
+            return curso.Nombre == "102";
+        }
+
 
         private static void Operadores(){
             Console.WriteLine("Documentación: https://docs.microsoft.com/es-es/dotnet/csharp/language-reference/operators/");
