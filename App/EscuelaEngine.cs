@@ -28,6 +28,30 @@ namespace CoreEscuela.App
 
         private void CargarEvaluaciones()
         {
+            foreach (var curso in Escuela.Cursos)
+            {
+                foreach (var alumno in curso.Alumnos)
+                {
+                    foreach (var asignatura in curso.Asignaturas)
+                    {
+                        for (int i = 0; i < 5; i++)
+                        {
+                            asignatura.Evaluaciones.Add(new Evaluaciones {
+                            Alumno = alumno, Asignatura = asignatura, Nota = (float)Math.Round(GenerarNota(), 2, MidpointRounding.ToEven), Nombre = GenerarNombre(asignatura.Nombre, alumno.Nombre)
+                            }); 
+                        }
+                    }
+                }
+            }
+        }
+        private string GenerarNombre(string asignatura, string alumno) {
+            DateTime fecha = DateTime.Now;
+            return $"{asignatura.ToUpper()}_{alumno}_{fecha.ToLongDateString()}";
+        }
+
+        private double GenerarNota() {
+            Random rnd = new Random();
+            return rnd.NextDouble() * 5;
         }
 
         private void CargarAsignaturas()
