@@ -7,19 +7,27 @@ namespace CorEscuela
 {
     class Program
     {
+
         static void Main(string[] args)
         {
-            Printer.WriteTitle("Control de escuelas");
-            EscuelaEngine escuelaEngine = new EscuelaEngine();
-
-            Printer.Beep(1500, repeticiones:3);
-            ImprimirCursos(escuelaEngine.Escuela);
+            var engine = new EscuelaEngine();
+            engine.Inicializar();
+            Printer.WriteTitle("Control Escuelas");
+            Printer.Beep(10000, repeticiones:3);
+            ImpimirCursosEscuela(engine.Escuela);
         }
-        private static void ImprimirCursos(Escuela escuela){
-            if(escuela!= null && escuela.Cursos != null){
+
+        private static void ImpimirCursosEscuela(Escuela escuela)
+        {
+            
+            Printer.WriteTitle("Cursos de la Escuela");
+            
+            
+            if (escuela?.Cursos != null)
+            {
                 foreach (var curso in escuela.Cursos)
                 {
-                    System.Console.WriteLine(curso);
+                    Console.WriteLine($"Nombre {curso.Nombre  }, Id  {curso.UniqueID}");
                 }
             }
         }
