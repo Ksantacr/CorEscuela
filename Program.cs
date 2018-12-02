@@ -27,7 +27,7 @@ namespace CorEscuela
             {
                 foreach (var curso in escuela.Cursos)
                 {
-                    Console.WriteLine($"Nombre {curso.Nombre  }, Id  {curso.UniqueID}");
+                    Console.WriteLine($"Nombre {curso.Nombre  }, Id  {curso.UniqueId}");
                 }
             }
         }

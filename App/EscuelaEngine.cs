@@ -5,7 +5,7 @@ using CoreEscuela.Entidades;
 
 namespace CoreEscuela.App
 {
-    public class EscuelaEngine
+    public sealed class EscuelaEngine
     {
         public Escuela Escuela { get; set; }
 
@@ -28,28 +28,33 @@ namespace CoreEscuela.App
 
         private void CargarEvaluaciones()
         {
+            var listaEvaluaciones = new List<Evaluacion>();
             foreach (var curso in Escuela.Cursos)
             {
-                foreach (var alumno in curso.Alumnos)
+                foreach (var asignatura in curso.Asignaturas)
                 {
-                    foreach (var asignatura in curso.Asignaturas)
+                    foreach (var alumno in curso.Alumnos)
                     {
+                        var rnd = new Random(System.Environment.TickCount);
+
                         for (int i = 0; i < 5; i++)
                         {
-                            asignatura.Evaluaciones.Add(new Evaluaciones {
-                            Alumno = alumno, Asignatura = asignatura, Nota = (float)Math.Round(GenerarNota(), 2, MidpointRounding.ToEven), Nombre = GenerarNombre(asignatura.Nombre, alumno.Nombre)
-                            }); 
+                            var ev = new Evaluacion
+                            {
+                                Asignatura = asignatura,
+                                Nombre = $"{asignatura.Nombre} Ev#{i + 1}",
+                                Nota = (float)Math.Round(GenerarNota(), 2),
+                                Alumno = alumno
+                            };
+                            listaEvaluaciones.Add(ev);
                         }
+                        alumno.Evaluaciones = listaEvaluaciones;
                     }
                 }
             }
         }
-        private string GenerarNombre(string asignatura, string alumno) {
-            DateTime fecha = DateTime.Now;
-            return $"{asignatura.ToUpper()}_{alumno}_{fecha.ToLongDateString()}";
-        }
-
-        private double GenerarNota() {
+        private double GenerarNota()
+        {
             Random rnd = new Random();
             return rnd.NextDouble() * 5;
         }
@@ -68,18 +73,18 @@ namespace CoreEscuela.App
             }
         }
 
-        private List<Alumno> GenerarAlumnosAlAzar( int cantidad)
+        private List<Alumno> GenerarAlumnosAlAzar(int cantidad)
         {
             string[] nombre1 = { "Alba", "Felipa", "Eusebio", "Farid", "Donald", "Alvaro", "Nicolás" };
             string[] apellido1 = { "Ruiz", "Sarmiento", "Uribe", "Maduro", "Trump", "Toledo", "Herrera" };
             string[] nombre2 = { "Freddy", "Anabel", "Rick", "Murty", "Silvana", "Diomedes", "Nicomedes", "Teodoro" };
 
-            var listaAlumnos =  from n1 in nombre1
-                                from n2 in nombre2
-                                from a1 in apellido1
-                                select new Alumno{ Nombre=$"{n1} {n2} {a1}" };
-            
-            return listaAlumnos.OrderBy( (al)=> al.UniqueId ).Take(cantidad).ToList();
+            var listaAlumnos = from n1 in nombre1
+                               from n2 in nombre2
+                               from a1 in apellido1
+                               select new Alumno { Nombre = $"{n1} {n2} {a1}" };
+
+            return listaAlumnos.OrderBy((al) => al.UniqueId).Take(cantidad).ToList();
         }
 
         private void CargarCursos()
@@ -91,9 +96,9 @@ namespace CoreEscuela.App
                         new Curso(){ Nombre = "401", Jornada = TiposJornadas.Matutina },
                         new Curso() {Nombre = "501", Jornada = TiposJornadas.Matutina},
             };
-            
+
             Random rnd = new Random();
-            foreach(var c in Escuela.Cursos)
+            foreach (var c in Escuela.Cursos)
             {
                 int cantRandom = rnd.Next(5, 20);
                 c.Alumnos = GenerarAlumnosAlAzar(cantRandom);
